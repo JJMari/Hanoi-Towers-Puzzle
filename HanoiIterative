@@ -1,0 +1,15 @@
+public class HanoiIteratiu {
+
+    public static void main(String [] args){
+        new HanoiIteratiu().metode();
+    }
+
+    public void metode(){
+        int numDisks = 3;
+        Stack src = new Stack();
+        Stack dest = new Stack();
+        Stack aux = new Stack();
+        
+        src.hLogic(numDisks,aux, dest);
+    }
+}
