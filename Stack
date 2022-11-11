@@ -1,0 +1,115 @@
+import java.util.ArrayList;
+/**
+ *
+ * @author marij
+ */
+public class Stack {
+    //Arraylist that keeps the stack
+    private final ArrayList<Integer>e;
+
+    public Stack() {
+        e = new ArrayList();
+    }
+    
+    private boolean isEmpty() {
+        return e.size()-1 == -1;
+    }
+    /**
+     * function to push an element to the stack
+     * @param i 
+     */
+    private void push(int i) {
+        e.add(i);
+    }
+    /**
+     * function to get the first element of the stack
+     * @return the element removed
+     */
+    private int pop() {
+        if (isEmpty()) {
+            return Integer.MIN_VALUE;
+        }
+        return e.remove(e.size()-1);
+    }
+    /**
+     * Print of a disk which is moving from "from" to "to" 
+     * @param from where's from the numbre
+     * @param to where is going the numbre
+     * @param n  disk to move
+     */
+    private void moveDisk(char from, char to, int n) {
+        System.out.println("hem mogut " + n + " de " + from + " a " + to);
+    }
+
+    /**
+     * Logic to move the disks
+     * @param dest pila on es pot moure el disc
+     * @param src   etiqueta d'origen
+     * @param des  etiqueta destí
+     */
+    private void moveDisks(Stack dest, char src, char des) {
+
+        int top1 = this.pop();
+        int top2 = dest.pop();
+        //main stack is empty so move top2 to the empty stack
+        if (top1 == Integer.MIN_VALUE) {
+            this.push(top2);
+            moveDisk(des, src, top2);
+        } 
+        //dest stack is empty so move top1 to the empty stack
+        else if (top2 == Integer.MIN_VALUE) {
+            dest.push(top1);
+            moveDisk(src, des, top1);
+        }
+        //move all to main stack 
+        else if (top1 > top2) {
+            this.push(top1);
+            this.push(top2);
+            moveDisk(des, src, top2);
+        }
+        //move all to dest stack
+        else if(top2>top1) {
+            dest.push(top2);
+            dest.push(top1);
+            moveDisk(src, des, top1);
+        }
+    }
+    /**
+     * function that drives the logic of the HanoiTower puzzle 
+     * P{ capacity>0 }
+     * Q{ dest != this}
+     * O(2n) 
+     * @param capacity number of disks used
+     * @param aux   auxiliar stack
+     * @param dest  destination stack
+     */
+    public void hLogic(int capacity,Stack aux, Stack dest) {
+        int i, cont;
+        //labels that shows the stack where we have the tower
+        char s = 'A', d = 'C', a = 'B';
+
+        //if capacity is even swaps auxiliar label with destination label
+        if (capacity % 2 == 0) {
+            char temp = d;
+            d = a;
+            a = temp;
+        }
+        cont = (int) (Math.pow(2, capacity) - 1);
+        
+        //fill the main stack
+        for (i = capacity; i >= 1; i--) {
+            push(i);
+        }
+        //loop to finish the logic
+        for (i = 1; i <= cont; i++) {
+            switch (i % 3) {
+                case 1 ->
+                    this.moveDisks(dest, s, d);
+                case 2 ->
+                    this.moveDisks(aux, s, a);
+                case 0 ->
+                    aux.moveDisks(dest, a, d);
+            }
+        }
+    }
+}
